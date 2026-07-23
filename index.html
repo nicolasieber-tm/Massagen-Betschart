@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Betschart · Massagen & Coaching – Brunnen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#f5f0e8;
+    --sand-2:#ece4d6;
+    --cream:#fbf9f4;
+    --sage:#6f7d5d;
+    --sage-deep:#4c5840;
+    --sage-soft:#9aa683;
+    --clay:#a9764c;
+    --clay-dark:#8a5d38;
+    --ink:#2c2e28;
+    --ink-soft:#63655b;
+    --line:#e4dccd;
+    --white:#fff;
+    --shadow:0 30px 70px -30px rgba(44,40,28,.4);
+    --shadow-sm:0 10px 30px -14px rgba(44,40,28,.45);
+    --serif:'Helvetica Neue','Helvetica','Arial',sans-serif;
+    --sans:'Inter',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--sans);color:var(--ink);background:var(--cream);line-height:1.7;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.08;letter-spacing:-.025em}
+  a{color:inherit;text-decoration:none}
+  img{display:block;max-width:100%}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+  .eyebrow{text-transform:uppercase;letter-spacing:.3em;font-size:.7rem;font-weight:600;color:var(--clay-dark);font-family:var(--sans)}
+  .btn{display:inline-flex;align-items:center;gap:.55rem;cursor:pointer;border:none;font-family:var(--sans);
+    font-size:.95rem;font-weight:500;padding:.9rem 1.7rem;border-radius:2px;transition:.25s;letter-spacing:.01em}
+  .btn-primary{background:var(--sage);color:#fff}
+  .btn-primary:hover{background:var(--sage-deep);transform:translateY(-2px)}
+  .btn-clay{background:var(--clay);color:#fff}
+  .btn-clay:hover{background:var(--clay-dark);transform:translateY(-2px)}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5)}
+  .btn-ghost:hover{background:rgba(255,255,255,.12);border-color:#fff}
+  .btn-line{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  .btn-line:hover{border-color:var(--sage);color:var(--sage-deep)}
+  .arrow{font-size:1.05em;line-height:1}
+
+  /* HEADER */
+  header{position:fixed;top:0;left:0;right:0;z-index:50;transition:.3s}
+  header.scrolled{background:rgba(251,249,244,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+  .logo{display:flex;flex-direction:column;line-height:1;color:#fff;transition:.3s}
+  header.scrolled .logo{color:var(--ink)}
+  .logo b{font-family:var(--serif);font-size:1.3rem;font-weight:500;letter-spacing:.02em}
+  .logo span{font-size:.62rem;letter-spacing:.34em;text-transform:uppercase;opacity:.8;margin-top:4px}
+  .nav-links{display:flex;gap:2.2rem;align-items:center}
+  .nav-links a{font-size:.9rem;color:rgba(255,255,255,.85);font-weight:500;transition:.2s;position:relative}
+  header.scrolled .nav-links a{color:var(--ink-soft)}
+  .nav-links a:hover{color:#fff}
+  header.scrolled .nav-links a:hover{color:var(--sage-deep)}
+  .nav-cta{display:flex;align-items:center;gap:1.2rem}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+  .burger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:.3s}
+  header.scrolled .burger span{background:var(--ink)}
+  @media(max-width:880px){.nav-links{display:none}.burger{display:flex}}
+
+  /* HERO */
+  .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:
+    linear-gradient(180deg,rgba(30,32,24,.55) 0%,rgba(30,32,24,.35) 40%,rgba(30,32,24,.7) 100%),
+    url('https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1900&q=80');
+    background-size:cover;background-position:center;z-index:-1;transform:scale(1.05)}
+  .hero-inner{max-width:800px;padding:120px 28px 90px}
+  .hero .eyebrow{color:rgba(255,255,255,.85)}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.6rem);font-weight:700;margin:1.4rem 0 1.5rem;letter-spacing:-.03em}
+  .hero h1 em{font-style:normal;color:#e3dcc9}
+  .hero p{font-size:1.18rem;color:rgba(255,255,255,.92);max-width:56ch;margin:0 auto 2.4rem;font-weight:400}
+  .hero-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+  .hero-trust{display:flex;align-items:center;justify-content:center;gap:28px;margin-top:2.8rem;flex-wrap:wrap}
+  .ht-item{display:flex;flex-direction:column;align-items:center;line-height:1.2}
+  .ht-item b{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+  .ht-item span{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.8);margin-top:3px}
+  .ht-sep{width:1px;height:34px;background:rgba(255,255,255,.3)}
+  @media(max-width:560px){.ht-sep{display:none}.hero-trust{gap:18px 26px}}
+  .hero-scroll{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.8);
+    font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .hero-scroll::after{content:"";width:1px;height:40px;background:linear-gradient(rgba(255,255,255,.7),transparent);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+  /* ANGEBOTE ÜBERSICHT */
+  .overview{padding:90px 0 20px}
+  .angebote-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .ang-card{position:relative;overflow:hidden;border-radius:8px;min-height:370px;display:flex;flex-direction:column;justify-content:flex-end;
+    color:#fff;text-decoration:none;isolation:isolate;box-shadow:var(--shadow-sm)}
+  .ang-bg{position:absolute;inset:0;z-index:-2;background-size:cover;background-position:center;transition:transform .6s ease}
+  .ang-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(30,32,24,.15) 0%,rgba(30,32,24,.5) 50%,rgba(28,30,22,.88) 100%)}
+  .ang-card:hover .ang-bg{transform:scale(1.06)}
+  .ang-body{padding:30px 28px}
+  .ang-body .step{font-family:var(--serif);font-size:.9rem;color:#e0c9ab;letter-spacing:.05em;display:block;margin-bottom:.6rem}
+  .ang-body h3{font-family:var(--serif);font-size:1.6rem;font-weight:500;margin-bottom:.6rem;line-height:1.1}
+  .ang-body p{font-size:.92rem;color:rgba(255,255,255,.88);margin-bottom:1.2rem}
+  .ang-more{display:inline-flex;align-items:center;gap:.5rem;font-size:.85rem;font-weight:600;letter-spacing:.02em;color:#fff}
+  .ang-more .arrow{transition:transform .25s}
+  .ang-card:hover .ang-more .arrow{transform:translateX(5px)}
+  @media(max-width:880px){.angebote-cards{grid-template-columns:1fr}.ang-card{min-height:300px}}
+
+  /* PHILOSOPHY STRIP */
+  .philo{padding:100px 0 40px;text-align:center}
+  .philo .eyebrow{display:block;margin-bottom:1.4rem}
+  .philo p{font-family:var(--serif);font-size:clamp(1.5rem,3.2vw,2.3rem);line-height:1.35;max-width:20ch;margin:0 auto;color:var(--ink);font-weight:400}
+  .philo p em{font-style:italic;color:var(--sage-deep)}
+  .philo .sub{font-family:var(--sans);font-size:1.02rem;color:var(--ink-soft);max-width:52ch;margin:1.8rem auto 0;line-height:1.7}
+
+  /* SERVICE SECTIONS */
+  .service{padding:90px 0}
+  .service:nth-child(odd of .service){background:var(--cream)}
+  .service.alt{background:var(--sand)}
+  .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center}
+  .service.reverse .svc-media{order:2}
+  .svc-media{position:relative}
+  .svc-media img{width:100%;height:540px;object-fit:cover;border-radius:4px}
+  .svc-num{position:absolute;top:-28px;left:-14px;font-family:var(--serif);font-size:6rem;font-weight:400;color:var(--sage);opacity:.16;line-height:1}
+  .svc-media .tag{position:absolute;bottom:22px;left:22px;background:rgba(251,249,244,.95);backdrop-filter:blur(6px);
+    padding:.7rem 1.1rem;border-radius:3px;font-size:.82rem;font-weight:600;color:var(--sage-deep);letter-spacing:.02em}
+  .svc-icon{width:44px;height:44px;color:var(--clay);margin-bottom:20px}
+  .svc-icon svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:1.3}
+  .svc-body .eyebrow{display:block;margin-bottom:1rem}
+  .svc-body h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:700;margin-bottom:1.2rem}
+  .svc-body>p{color:var(--ink-soft);font-size:1.06rem;margin-bottom:1.8rem;max-width:46ch}
+  .svc-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px 28px;margin-bottom:2rem}
+  .svc-cols .col b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--clay-dark);margin-bottom:10px;font-family:var(--sans)}
+  .svc-cols ul{list-style:none}
+  .svc-cols li{font-size:.92rem;color:var(--ink-soft);padding:4px 0 4px 20px;position:relative}
+  .svc-cols li::before{content:"";position:absolute;left:0;top:13px;width:7px;height:1px;background:var(--sage-soft)}
+  .svc-methods{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:2rem}
+  .svc-methods .chip{background:transparent;border:1px solid var(--line);border-radius:999px;padding:.42rem 1rem;font-size:.82rem;color:var(--ink-soft);font-weight:500;transition:.2s}
+  .svc-methods .chip:hover{border-color:var(--sage-soft);color:var(--sage-deep)}
+  .svc-foot{display:flex;align-items:center;gap:1.6rem;flex-wrap:wrap}
+  .svc-price{font-size:.95rem;color:var(--ink);font-weight:600}
+  .svc-price span{color:var(--ink-soft);font-weight:400;font-size:.85rem}
+  /* methods frames */
+  .methods-block{margin-top:70px}
+  .methods-head{margin-bottom:30px}
+  .methods-head .eyebrow{display:block;margin-bottom:.7rem}
+  .methods-head h3{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:700}
+  .frames{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .frame{background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;transition:.25s transform,.25s box-shadow}
+  .frame:hover{transform:translateY(-4px);box-shadow:var(--shadow-sm)}
+  .frame-bg{height:190px;background-size:cover;background-position:center;transition:transform .6s ease}
+  .frame:hover .frame-bg{transform:scale(1.05)}
+  .frame-body{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+  .frame-body h4{font-family:var(--serif);font-size:1.35rem;font-weight:500;margin-bottom:.5rem;line-height:1.15;color:var(--ink)}
+  .frame-body>p{font-size:.9rem;color:var(--ink-soft);margin-bottom:1.3rem}
+  .frame-cols{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin-top:auto;padding-top:16px;border-top:1px solid var(--line)}
+  .frame-cols b{display:block;font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--clay-dark);margin-bottom:8px;font-family:var(--sans);font-weight:600}
+  .frame-cols ul{list-style:none}
+  .frame-cols li{font-size:.82rem;color:var(--ink-soft);padding:2px 0 2px 14px;position:relative;line-height:1.45}
+  .frame-cols li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:1px;background:var(--sage-soft)}
+  .frame-btn{margin-top:20px;width:100%;justify-content:center;background:var(--sage);color:#fff;font-size:.86rem;padding:.72rem 1rem;border-radius:4px}
+  .frame-btn:hover{background:var(--sage-deep)}
+  @media(max-width:880px){.frames{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.frames{grid-template-columns:1fr}}
+  @media(max-width:880px){
+    .svc-grid{grid-template-columns:1fr;gap:36px}
+    .service.reverse .svc-media{order:0}
+    .svc-media img{height:340px}
+    .svc-num{font-size:4rem;top:-20px}
+  }
+
+  /* ÜBER MICH */
+  .about{background:var(--sage-deep);color:#efeada;padding:100px 0}
+  .about-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:center}
+  .about-media img{width:100%;height:460px;object-fit:cover;border-radius:4px}
+  .about .eyebrow{color:#c9cbb0;display:block;margin-bottom:1rem}
+  .about h2{font-size:clamp(2rem,3.6vw,2.8rem);font-weight:700;color:#fff;margin-bottom:1.4rem}
+  .about p{color:rgba(239,234,218,.85);margin-bottom:1.1rem;font-size:1.02rem}
+  .about .quote{font-family:var(--serif);font-style:italic;font-size:1.3rem;color:#fff;border-left:2px solid var(--sage-soft);padding-left:20px;margin:1.8rem 0}
+  .about .sign{font-family:var(--serif);font-size:1.4rem;color:#e3dcc9;margin-top:.4rem}
+  .about-stats{display:flex;gap:2.4rem;margin-top:2rem;flex-wrap:wrap}
+  .about-stats b{font-family:var(--serif);font-size:2rem;color:#fff;display:block;font-weight:700}
+  .about-stats small{font-size:.78rem;color:#c9cbb0;letter-spacing:.04em}
+  @media(max-width:880px){.about-grid{grid-template-columns:1fr;gap:34px}.about-media img{height:320px}}
+
+  /* PREISE */
+  .prices{padding:100px 0;text-align:center}
+  .sec-head{max-width:620px;margin:0 auto 54px}
+  .sec-head .eyebrow{display:block;margin-bottom:1rem}
+  .sec-head h2{font-size:clamp(2rem,3.6vw,2.7rem);font-weight:700;margin-bottom:.8rem}
+  .sec-head p{color:var(--ink-soft)}
+  .overview .sec-head{max-width:620px;margin-left:0;margin-right:auto;text-align:left}
+  .price-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:720px;margin:0 auto}
+  .price-card{background:#fff;border:1px solid var(--line);border-radius:4px;padding:40px 34px;transition:.25s}
+  .price-card:hover{box-shadow:var(--shadow-sm);transform:translateY(-3px)}
+  .price-card .eyebrow{display:block;margin-bottom:1.2rem}
+  .price-card .big{font-family:var(--serif);font-size:2.8rem;font-weight:400;color:var(--sage-deep);margin-bottom:.4rem}
+  .price-card .big small{font-size:.9rem;color:var(--ink-soft)}
+  .price-card p{font-size:.9rem;color:var(--ink-soft)}
+  .price-note{max-width:600px;margin:34px auto 0;color:var(--ink-soft);font-size:.9rem}
+  .badges{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .kk-badge{border:1px solid var(--line);border-radius:999px;padding:.5rem 1.1rem;font-size:.8rem;font-weight:600;color:var(--sage-deep)}
+  @media(max-width:560px){.price-grid{grid-template-columns:1fr}}
+
+  /* CTA BAND */
+  .band-sec{padding:0 0 100px}
+  .band{position:relative;overflow:hidden;border-radius:6px;padding:72px 48px;text-align:center;color:#fff}
+  .band-bg{position:absolute;inset:0;z-index:-1;background:
+    linear-gradient(rgba(44,50,34,.72),rgba(44,50,34,.72)),
+    url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1600&q=80');
+    background-size:cover;background-position:center}
+  .band h2{font-size:clamp(1.9rem,3.6vw,2.6rem);font-weight:700;margin-bottom:1rem}
+  .band p{color:rgba(255,255,255,.9);max-width:48ch;margin:0 auto 2rem;font-size:1.06rem}
+
+  /* KONTAKT */
+  .contact{padding:100px 0}
+  .contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:50px;align-items:stretch}
+  .contact-info div{margin-bottom:24px}
+  .contact-info b{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay-dark);margin-bottom:5px;font-family:var(--sans)}
+  .contact-info p{color:var(--ink-soft)}
+  .contact-info a:hover{color:var(--sage-deep)}
+  .map{border-radius:4px;overflow:hidden;min-height:360px;border:1px solid var(--line)}
+  .map iframe{width:100%;height:100%;min-height:360px;border:0}
+  @media(max-width:880px){.contact-grid{grid-template-columns:1fr;gap:34px}}
+
+  /* FOOTER */
+  footer{background:var(--ink);color:#b9bab0;padding:56px 0 32px;font-size:.9rem}
+  .foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:34px}
+  .foot-grid .logo{color:#fff}
+  .foot-grid .logo span{color:#8f9086}
+  .foot-col b{color:#fff;display:block;margin-bottom:8px;font-family:var(--sans);font-weight:600}
+  footer a:hover{color:#fff}
+  .foot-bar{border-top:1px solid #43443c;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.8rem;color:#83847a}
+
+  .float-book{position:fixed;right:18px;bottom:18px;z-index:40;box-shadow:var(--shadow-sm)}
+  @media(min-width:881px){.float-book{display:none}}
+
+  /* ---------- BOOKING OVERLAY ---------- */
+  .overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(40,38,28,.6);backdrop-filter:blur(5px)}
+  .overlay.open{display:flex;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  .modal{background:var(--cream);width:100%;max-width:640px;border-radius:8px;box-shadow:var(--shadow);max-height:92vh;overflow:hidden;display:flex;flex-direction:column;animation:pop .3s cubic-bezier(.2,.8,.3,1)}
+  @keyframes pop{from{transform:translateY(24px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+  .modal-head{padding:22px 26px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;background:#fff}
+  .modal-head h3{font-family:var(--serif);font-size:1.3rem;font-weight:500}
+  .modal-head small{color:var(--ink-soft);font-size:.82rem}
+  .close{background:var(--sand);border:none;width:36px;height:36px;border-radius:50%;font-size:1.05rem;cursor:pointer;color:var(--ink);transition:.2s}
+  .close:hover{background:var(--sand-2)}
+  .steps{display:flex;padding:18px 26px 4px;gap:8px}
+  .step-pill{flex:1;display:flex;flex-direction:column;gap:6px}
+  .step-pill .bar{height:4px;border-radius:3px;background:var(--line);transition:.3s}
+  .step-pill.active .bar,.step-pill.done .bar{background:var(--sage)}
+  .step-pill small{font-size:.68rem;color:var(--ink-soft);letter-spacing:.04em}
+  .step-pill.active small{color:var(--sage-deep);font-weight:600}
+  .modal-body{padding:22px 26px 8px;overflow-y:auto;flex:1}
+  .step-panel{display:none}
+  .step-panel.active{display:block;animation:slideIn .28s ease}
+  @keyframes slideIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+  .step-title{font-family:var(--serif);font-size:1.25rem;font-weight:500;margin-bottom:4px}
+  .step-sub{font-size:.86rem;color:var(--ink-soft);margin-bottom:18px}
+  .opt-group{margin-bottom:20px}
+  .opt-group>label{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--clay-dark);font-weight:600;display:block;margin-bottom:10px}
+  .opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:#fff;border-radius:6px;padding:13px 15px;margin-bottom:9px;cursor:pointer;transition:.18s}
+  .opt:hover{border-color:var(--sage-soft)}
+  .opt.sel{border-color:var(--sage);background:#f2f4ec;box-shadow:0 0 0 3px rgba(111,125,93,.12)}
+  .opt .radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;position:relative;transition:.18s}
+  .opt.sel .radio{border-color:var(--sage)}
+  .opt.sel .radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--sage)}
+  .opt .txt{flex:1}
+  .opt .txt b{font-size:.95rem;font-weight:600;display:block}
+  .opt .txt span{font-size:.8rem;color:var(--ink-soft)}
+  .opt .meta{font-size:.82rem;color:var(--clay-dark);font-weight:600;text-align:right;white-space:nowrap}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .cal-head b{font-family:var(--serif);font-size:1.1rem;font-weight:500}
+  .cal-nav{background:var(--sand);border:none;width:34px;height:34px;border-radius:6px;cursor:pointer;font-size:1rem;color:var(--ink);transition:.2s}
+  .cal-nav:hover{background:var(--sand-2)}
+  .cal-nav:disabled{opacity:.35;cursor:not-allowed}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-grid .dow{text-align:center;font-size:.7rem;color:var(--ink-soft);font-weight:600;padding:4px 0}
+  .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:.9rem;cursor:pointer;border:1px solid transparent;transition:.15s;color:var(--ink)}
+  .cal-day:hover:not(.disabled):not(.empty):not(.sel){background:var(--sand)}
+  .cal-day.disabled{color:#c9c3b6;cursor:not-allowed}
+  .cal-day.empty{cursor:default}
+  .cal-day.sel{background:var(--sage);color:#fff;font-weight:600}
+  .cal-day.today{border-color:var(--sage-soft)}
+  .slots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .slot{border:1px solid var(--line);background:#fff;border-radius:6px;padding:.7rem 0;text-align:center;font-size:.92rem;cursor:pointer;transition:.18s;font-weight:500}
+  .slot:hover{border-color:var(--sage-soft)}
+  .slot.sel{background:var(--sage);color:#fff;border-color:var(--sage)}
+  .slot.taken{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+  @media(max-width:520px){.slots{grid-template-columns:repeat(3,1fr)}}
+  .field{margin-bottom:14px}
+  .field label{font-size:.82rem;font-weight:600;display:block;margin-bottom:6px}
+  .field input,.field textarea{width:100%;padding:.75rem .9rem;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:.95rem;background:#fff;color:var(--ink);transition:.18s}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--sage);box-shadow:0 0 0 3px rgba(111,125,93,.12)}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.row-2{grid-template-columns:1fr}}
+  .summary{background:#fff;border:1px solid var(--line);border-radius:6px;padding:16px 18px;margin-bottom:16px}
+  .summary .row{display:flex;justify-content:space-between;padding:7px 0;font-size:.9rem;border-bottom:1px dashed var(--line);gap:14px}
+  .summary .row:last-child{border:none}
+  .summary .row span{color:var(--ink-soft)}
+  .summary .row b{color:var(--ink);text-align:right}
+  .modal-foot{padding:16px 26px 22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff}
+  .modal-foot .hint{font-size:.8rem;color:var(--ink-soft)}
+  .modal-foot .btn[disabled]{opacity:.4;cursor:not-allowed;transform:none}
+  .success{text-align:center;padding:24px 10px 10px}
+  .success .check{width:74px;height:74px;border-radius:50%;background:#eef2e5;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:2rem;color:var(--sage-deep)}
+  .success h3{font-family:var(--serif);font-size:1.5rem;font-weight:500;margin-bottom:.5rem}
+  .success p{color:var(--ink-soft);margin-bottom:6px}
+</style>
+</head>
+<body id="top">
+
+<!-- HEADER -->
+<header id="siteHeader">
+  <div class="wrap nav">
+    <a href="#top" class="logo"><b>BETSCHART</b><span>Massagen &amp; Coaching</span></a>
+    <nav class="nav-links">
+      <a href="#massage">Massagen</a>
+      <a href="#hypnose">Hypnose</a>
+      <a href="#coaching">Coaching</a>
+      <a href="#ueber">Über mich</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <div class="nav-cta">
+      <button class="btn btn-primary" onclick="openBooking()">Termin buchen</button>
+      <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <span class="eyebrow">Praxis in Brunnen · Kanton Schwyz</span>
+    <h1>Zurück ins <em>Gleichgewicht</em></h1>
+    <p>Medizinische Massagen, Hypnose und Coaching für Körper und Geist – individuell, wirkungsvoll und ganzheitlich, bei Remo Betschart.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="openBooking()">Termin online buchen</button>
+      <a href="#angebote" class="btn btn-ghost">Angebote entdecken</a>
+    </div>
+    <div class="hero-trust">
+      <div class="ht-item"><b>15+</b><span>Jahre Erfahrung</span></div>
+      <div class="ht-sep"></div>
+      <div class="ht-item"><b>EMR / EGK</b><span>Krankenkassen anerkannt</span></div>
+      <div class="ht-sep"></div>
+      <div class="ht-item"><b>eidg. FA</b><span>Med. Masseur / SRK</span></div>
+    </div>
+  </div>
+  <a href="#angebote" class="hero-scroll">Mehr</a>
+</section>
+
+<!-- ANGEBOTE ÜBERSICHT -->
+<section class="overview" id="angebote">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Angebote</span>
+      <h2>Womit darf ich Sie unterstützen?</h2>
+      <p>Drei Wege für Körper und Geist – wählen Sie einen Bereich, um mehr zu erfahren.</p>
+    </div>
+    <div class="angebote-cards">
+      <a href="#massage" class="ang-card">
+        <div class="ang-bg" style="background-image:url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80')"></div>
+        <div class="ang-body">
+          <span class="step">01</span>
+          <h3>Medizinische Massagen</h3>
+          <p>Verspannungen lösen, Durchblutung fördern und regenerieren – krankenkassenanerkannt.</p>
+          <span class="ang-more">Mehr erfahren <span class="arrow">→</span></span>
+        </div>
+      </a>
+      <a href="#hypnose" class="ang-card">
+        <div class="ang-bg" style="background-image:url('https://images.unsplash.com/photo-1528716321680-815a8cdb8cbe?auto=format&fit=crop&w=900&q=80')"></div>
+        <div class="ang-body">
+          <span class="step">02</span>
+          <h3>Hypnose</h3>
+          <p>Mentale Blockaden finden und lösen, Suchtverhalten verändern, Ängste behandeln.</p>
+          <span class="ang-more">Mehr erfahren <span class="arrow">→</span></span>
+        </div>
+      </a>
+      <a href="#coaching" class="ang-card">
+        <div class="ang-bg" style="background-image:url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80')"></div>
+        <div class="ang-body">
+          <span class="step">03</span>
+          <h3>Coaching</h3>
+          <p>Ziele und Träume verwirklichen mit positivem Coaching – inklusive Lauf-Coaching.</p>
+          <span class="ang-more">Mehr erfahren <span class="arrow">→</span></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="philo" id="philo">
+  <div class="wrap">
+    <span class="eyebrow">Körper &amp; Geist</span>
+    <p>„Das Ganze ist mehr als die <em>Summe</em> seiner Teile.“</p>
+    <p class="sub">Wenn sich unsere Wege finden, unterstütze ich Sie auf Ihrem Weg – auf physischer Ebene bei Schmerzen und Unwohlsein, auf psychischer Ebene beim Verwirklichen Ihrer Ziele und beim Lösen mentaler Blockaden.</p>
+  </div>
+</section>
+
+<!-- MASSAGE -->
+<section class="service" id="massage">
+  <div class="wrap svc-grid">
+    <div class="svc-media">
+      <img src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80" alt="Medizinische Massage">
+      <span class="tag">Krankenkassen&shy;anerkannt</span>
+    </div>
+    <div class="svc-body">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M4 14c2-3 5-4 8-4s6 1 8 4"/><path d="M7 10c1-2 3-3 5-3s4 1 5 3"/><circle cx="12" cy="18" r="1.4"/></svg></div>
+      <span class="eyebrow">Medizinische Massagen</span>
+      <h2>Verspannungen lösen, Regeneration fördern</h2>
+      <p>Die passende Technik wähle ich individuell auf Ihr Anliegen abgestimmt – von der Schmerzlinderung bis zur tiefen Entspannung. Alle Methoden im Überblick finden Sie unten.</p>
+      <div class="svc-foot">
+        <span class="svc-price">CHF 132.– <span>/ Stunde</span></span>
+        <button class="btn btn-line" onclick="openBooking('massage')">Massage buchen <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap methods-block">
+    <div class="methods-head">
+      <span class="eyebrow">Behandlungsangebot</span>
+      <h3>Die Massage-Methoden im Detail</h3>
+    </div>
+    <div class="frames">
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=jpg/path/s9b5b069e4a9fc815/image/i1fd4c142a6938f86/version/1468422096/image.jpg')"></div>
+        <div class="frame-body">
+          <h4>Klassische Massage</h4>
+          <p>Eines der ältesten Therapieverfahren – fördert Durchblutung, entstaut und entspannt die Muskulatur. Inkl. Triggerpunkttherapie.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Rücken- &amp; Nackenschmerzen</li><li>Migräne &amp; Kopfschmerzen</li><li>Bewegungsapparat</li><li>Stress &amp; Anspannung</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Kreislauf aktivieren</li><li>Verhärtungen lösen</li><li>Durchblutung steigern</li><li>Stress abbauen</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','klassisch')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=png/path/s9b5b069e4a9fc815/image/i4e5499487c8cd26b/version/1504271578/image.png')"></div>
+        <div class="frame-body">
+          <h4>Fussreflexzonenmassage</h4>
+          <p>Die Reflexzonentherapie am Fuss stärkt die Regenerationskräfte und wirkt ordnend auf den ganzen Menschen.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Geschwächtes Immunsystem</li><li>Verdauungsbeschwerden</li><li>Asthma &amp; Migräne</li><li>Erschöpfung</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Organfunktion verbessern</li><li>Entspannung</li><li>Stresshormone abbauen</li><li>Durchblutung anregen</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','fussreflex')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=png/path/s9b5b069e4a9fc815/image/i9c17c15c9b53500e/version/1504272340/image.png')"></div>
+        <div class="frame-body">
+          <h4>Bindegewebsmassage</h4>
+          <p>Reflextherapie ohne Öl: gezielte Hautreize beeinflussen den Reflexbogen von Organen, Muskeln und Gewebe positiv.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Wirbelsäulenproblematik</li><li>Atemwegserkrankungen</li><li>Durchblutungsstörungen</li><li>Stress</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Verklebungen lösen</li><li>Durchblutung anregen</li><li>Organe positiv beeinflussen</li><li>Immunsystem stärken</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','bindegewebe')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=png/path/s9b5b069e4a9fc815/image/i42e1c5c305c98650/version/1504271883/image.png')"></div>
+        <div class="frame-body">
+          <h4>Manuelle Lymphdrainage</h4>
+          <p>Steigert den Lymphfluss und verbessert die Immunfunktion – auch zur Frühbehandlung von Sportverletzungen.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Zerrungen &amp; Blutergüsse</li><li>Schwellungen</li><li>HWS-Syndrom &amp; Migräne</li><li>Ödeme nach OP</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Entwässert</li><li>Entgiftet</li><li>Beruhigt</li><li>Stärkt die Abwehr</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','lymph')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=jpg/path/s9b5b069e4a9fc815/image/ie50977ec858f86e7/version/1468423033/image.jpg')"></div>
+        <div class="frame-body">
+          <h4>Schröpfen</h4>
+          <p>Ausleitendes Heilverfahren: entfernt Giftstoffe aus dem Körper und löst Verspannungen auf sanfte Weise.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Hexenschuss</li><li>Ischiasbeschwerden</li><li>Kopfschmerzen / Migräne</li><li>Verdauungsprobleme</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Durchblutung fördern</li><li>Verspannungen lösen</li><li>Giftstoffe ausscheiden</li><li>Abwehr aktivieren</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','schroepfen')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=jpg/path/s9b5b069e4a9fc815/image/ife73ed89b8734a16/version/1468423426/image.jpg')"></div>
+        <div class="frame-body">
+          <h4>Schwingkissen</h4>
+          <p>Sanfter Wirbelsäulen-Basis-Ausgleich: passive Rückentherapie, die Wirbelgelenke ohne direkten Druckimpuls mobilisiert.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Kopf- &amp; Schulterschmerzen</li><li>Beckenschiefstände</li><li>Nackenschiefstände</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Schonende Mobilisation</li><li>Blockaden lösen</li><li>Schiefstände richten</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','schwingkissen')">Diese Massage buchen →</button>
+        </div>
+      </div>
+      <div class="frame">
+        <div class="frame-bg" style="background-image:url('https://image.jimcdn.com/app/cms/image/transf/dimension=700x10000:format=jpg/path/s9b5b069e4a9fc815/image/ib65c33d31714d639/version/1468424446/image.jpg')"></div>
+        <div class="frame-body">
+          <h4>Kinesio-Taping (MTC)</h4>
+          <p>Lindert Schmerzen und unterstützt die Heilung von Sportverletzungen durch sanfte äusserliche Anwendung.</p>
+          <div class="frame-cols">
+            <div><b>Anwendung</b><ul><li>Akute Schmerzen</li><li>Ergänzung zur Massage</li></ul></div>
+            <div><b>Wirkung</b><ul><li>Muskelfunktion unterstützen</li><li>Heilung fördern</li><li>Positive Wirkung auf Organe</li></ul></div>
+          </div>
+          <button class="btn frame-btn" onclick="openBooking('massage','kinesio')">Diese Massage buchen →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HYPNOSE -->
+<section class="service alt reverse" id="hypnose">
+  <div class="wrap svc-grid">
+    <div class="svc-media">
+      <img src="https://images.unsplash.com/photo-1528716321680-815a8cdb8cbe?auto=format&fit=crop&w=900&q=80" alt="Hypnose">
+      <span class="tag">Individuelle Begleitung</span>
+    </div>
+    <div class="svc-body">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="10"/></svg></div>
+      <span class="eyebrow">Hypnose</span>
+      <h2>Blockaden finden und lösen</h2>
+      <p>In einem tief entspannten Zustand übernimmt das Unterbewusstsein. Diesen Zugang nutzen wir, um versteckte Blockaden und Ängste sichtbar zu machen und gezielt zu behandeln.</p>
+      <div class="svc-cols">
+        <div class="col"><b>Themen</b><ul>
+          <li>Mentale Blockaden</li>
+          <li>Suchtverhalten</li>
+          <li>Ängste &amp; Muster</li>
+          <li>Vergangenheit aufarbeiten</li>
+        </ul></div>
+        <div class="col"><b>Ablauf</b><ul>
+          <li>Vertrauliches Vorgespräch</li>
+          <li>Trance-Zustand</li>
+          <li>Gezielte Arbeit am Anliegen</li>
+          <li>Integration &amp; Ausblick</li>
+        </ul></div>
+      </div>
+      <div class="svc-foot">
+        <span class="svc-price">Preis <span>nach Absprache</span></span>
+        <button class="btn btn-line" onclick="openBooking('hypnose')">Hypnose anfragen <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COACHING -->
+<section class="service" id="coaching">
+  <div class="wrap svc-grid">
+    <div class="svc-media">
+      <img src="https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=900&q=80" alt="Coaching">
+      <span class="tag">Inkl. Lauf-Coaching</span>
+    </div>
+    <div class="svc-body">
+      <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 20V10"/><path d="M12 20V4"/><path d="M18 20v-7"/></svg></div>
+      <span class="eyebrow">Coaching</span>
+      <h2>Ziele und Träume verwirklichen</h2>
+      <p>Mit positivem Coaching gehen wir Ihre Ziele an und lösen, was Sie hemmt. Für Läuferinnen und Läufer erstelle ich zusätzlich individuelle Trainingspläne.</p>
+      <div class="svc-cols">
+        <div class="col"><b>Schwerpunkte</b><ul>
+          <li>Positives Mentaltraining</li>
+          <li>Persönliche Zielerreichung</li>
+          <li>Lauf-Coaching</li>
+          <li>Individuelle Trainingspläne</li>
+        </ul></div>
+        <div class="col"><b>Gut zu wissen</b><ul>
+          <li>Erstberatung Lauf-Coaching gratis</li>
+          <li>Coaching auf Wunsch per Rechnung</li>
+          <li>Flexible Termine</li>
+          <li>Auch begleitend zur Massage</li>
+        </ul></div>
+      </div>
+      <div class="svc-foot">
+        <span class="svc-price">CHF 110.– <span>/ Stunde</span></span>
+        <button class="btn btn-line" onclick="openBooking('coaching')">Coaching buchen <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ÜBER MICH -->
+<section class="about" id="ueber">
+  <div class="wrap about-grid">
+    <div class="about-media">
+      <img src="https://image.jimcdn.com/app/cms/image/transf/dimension=665x10000:format=jpg/path/s9b5b069e4a9fc815/image/i4d7bc2ada8e5fc60/version/1650749975/hypnose.jpg" alt="Remo Betschart">
+    </div>
+    <div>
+      <span class="eyebrow">Über mich</span>
+      <h2>Remo Betschart</h2>
+      <p>Seit vielen Jahren bin ich als medizinischer Masseur eidg. FA / SRK tätig und verfüge über fundiertes Fachwissen in Hypnose und Coaching. In Schwyz und Umgebung bin ich Ihr Ansprechpartner, wenn Sie Blockaden lösen und wieder ins Gleichgewicht kommen möchten.</p>
+      <div class="quote">„Ich freue mich, mit Ihnen einen neuen Weg zu gehen und Sie körperlich und geistig zu unterstützen.“</div>
+      <div class="sign">Remo Betschart</div>
+      <div class="about-stats">
+        <div><b>15+</b><small>Jahre Erfahrung</small></div>
+        <div><b>7</b><small>Massage-Methoden</small></div>
+        <div><b>EMR/EGK</b><small>anerkannt</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREISE -->
+<section class="prices" id="preise">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Tarife &amp; Preise</span>
+      <h2>Transparent und fair</h2>
+      <p>Individuell · Wirkungsvoll · Ganzheitlich</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <span class="eyebrow">Massagen</span>
+        <div class="big">CHF 132.–<small> / Std.</small></div>
+        <p>Krankenkassenanerkannt über Zusatzversicherung (VVG)</p>
+      </div>
+      <div class="price-card">
+        <span class="eyebrow">Coaching</span>
+        <div class="big">CHF 110.–<small> / Std.</small></div>
+        <p>Lauf-Coaching-Erstberatung kostenlos</p>
+      </div>
+    </div>
+    <p class="price-note">Bezahlung per Kreditkarte (ausser Postbank), Twint oder bar nach der Behandlung. Die Kosten werden von Ihrer Krankenkasse zu den Bedingungen Ihrer Zusatzversicherung für Komplementärmedizin übernommen.</p>
+    <div class="badges">
+      <span class="kk-badge">EMR anerkannt</span>
+      <span class="kk-badge">EGK anerkannt</span>
+      <span class="kk-badge">Med. Masseur eidg. FA / SRK</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="band-sec">
+  <div class="wrap">
+    <div class="band">
+      <div class="band-bg"></div>
+      <h2>Bereit für Ihren nächsten Schritt?</h2>
+      <p>Wählen Sie Ihr Angebot, ein passendes Datum und einen freien Termin – in weniger als einer Minute.</p>
+      <button class="btn btn-clay" onclick="openBooking()">Jetzt Termin buchen</button>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="contact" id="kontakt">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Kontakt &amp; Anfahrt</span>
+      <h2>So finden Sie mich</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div><b>Adresse</b><p>Remo Betschart<br>Gotthardstrasse 3<br>6440 Brunnen</p></div>
+        <div><b>Telefon</b><p><a href="tel:+41793120865">+41 79 312 08 65</a></p></div>
+        <div><b>E-Mail</b><p><a href="mailto:info@massagen-betschart.ch">info@massagen-betschart.ch</a></p></div>
+        <div><b>Termin</b><p>Nach Vereinbarung – am einfachsten über die Online-Buchung.</p></div>
+        <button class="btn btn-primary" onclick="openBooking()">Termin buchen</button>
+      </div>
+      <div class="map">
+        <iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=8.60%2C46.99%2C8.62%2C47.01&amp;layer=mapnik&amp;marker=47.0006%2C8.6089" title="Karte Brunnen"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <a href="#top" class="logo"><b>BETSCHART</b><span>Massagen &amp; Coaching</span></a>
+      <div class="foot-col"><b>Angebote</b>Med. Massagen<br>Hypnose<br>Coaching &amp; Lauf-Coaching</div>
+      <div class="foot-col"><b>Kontakt</b>Gotthardstrasse 3, 6440 Brunnen<br>+41 79 312 08 65<br>info@massagen-betschart.ch</div>
+    </div>
+    <div class="foot-bar">
+      <span>© Remo Betschart</span>
+      <span>Datenschutz · Impressum · Sitemap</span>
+    </div>
+  </div>
+</footer>
+
+<button class="btn btn-clay float-book" onclick="openBooking()">Termin buchen</button>
+
+<!-- BOOKING OVERLAY -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeBooking()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <div><h3>Termin buchen</h3><small id="modalSub">Wählen Sie Ihr Angebot</small></div>
+      <button class="close" onclick="closeBooking()" aria-label="Schliessen">✕</button>
+    </div>
+    <div class="steps" id="steps">
+      <div class="step-pill active" data-s="1"><div class="bar"></div><small>Angebot</small></div>
+      <div class="step-pill" data-s="2"><div class="bar"></div><small>Datum</small></div>
+      <div class="step-pill" data-s="3"><div class="bar"></div><small>Zeit</small></div>
+      <div class="step-pill" data-s="4"><div class="bar"></div><small>Kontakt</small></div>
+    </div>
+    <div class="modal-body">
+      <div class="step-panel active" data-panel="1">
+        <div class="step-title">Welche Behandlung möchten Sie?</div>
+        <div class="step-sub">Wählen Sie eine Kategorie. Bei Massagen können Sie optional eine Methode angeben – oder offenlassen und Ihr Anliegen später beschreiben.</div>
+        <div class="opt-group">
+          <label>Kategorie</label>
+          <div class="opt" data-cat="massage" onclick="selectCat(this)"><div class="radio"></div><div class="txt"><b>Medizinische Massage</b><span>Verspannungen lösen &amp; regenerieren</span></div><div class="meta">60 Min · CHF 132.–</div></div>
+          <div class="opt" data-cat="hypnose" onclick="selectCat(this)"><div class="radio"></div><div class="txt"><b>Hypnose</b><span>Blockaden &amp; Suchtverhalten</span></div><div class="meta">nach Absprache</div></div>
+          <div class="opt" data-cat="coaching" onclick="selectCat(this)"><div class="radio"></div><div class="txt"><b>Coaching</b><span>Ziele, Mentaltraining, Lauf-Coaching</span></div><div class="meta">60 Min · CHF 110.–</div></div>
+        </div>
+        <div class="opt-group" id="methodGroup" style="display:none">
+          <label>Massage-Methode · optional</label>
+          <div id="methodList"></div>
+        </div>
+      </div>
+      <div class="step-panel" data-panel="2">
+        <div class="step-title">Wählen Sie ein Datum</div>
+        <div class="step-sub">Freie Tage sind auswählbar. Sonntags geschlossen.</div>
+        <div class="cal-head">
+          <button class="cal-nav" id="calPrev" onclick="changeMonth(-1)">‹</button>
+          <b id="calLabel"></b>
+          <button class="cal-nav" onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="step-panel" data-panel="3">
+        <div class="step-title">Freie Zeiten</div>
+        <div class="step-sub" id="slotSub">Verfügbare Termine</div>
+        <div class="slots" id="slotGrid"></div>
+      </div>
+      <div class="step-panel" data-panel="4">
+        <div class="step-title">Ihre Angaben</div>
+        <div class="step-sub">Zur Bestätigung Ihres Termins.</div>
+        <div class="summary" id="summary"></div>
+        <div class="row-2">
+          <div class="field"><label>Vorname *</label><input id="fVorname" type="text" oninput="validateContact()"></div>
+          <div class="field"><label>Nachname *</label><input id="fNachname" type="text" oninput="validateContact()"></div>
+        </div>
+        <div class="row-2">
+          <div class="field"><label>Telefon *</label><input id="fTel" type="tel" oninput="validateContact()"></div>
+          <div class="field"><label>E-Mail *</label><input id="fMail" type="email" oninput="validateContact()"></div>
+        </div>
+        <div class="field"><label>Anliegen (optional)</label><textarea id="fMsg" rows="2" placeholder="z. B. Nackenverspannung seit einer Woche"></textarea></div>
+      </div>
+      <div class="step-panel" data-panel="5">
+        <div class="success">
+          <div class="check">✓</div>
+          <h3>Terminanfrage gesendet!</h3>
+          <p id="successLine">Vielen Dank für Ihre Buchung.</p>
+          <p style="font-size:.85rem">Sie erhalten in Kürze eine Bestätigung. Bei Fragen: +41 79 312 08 65</p>
+          <button class="btn btn-primary" style="margin-top:18px" onclick="closeBooking()">Schliessen</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot" id="modalFoot">
+      <span class="hint" id="footHint">Schritt 1 von 4</span>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-line" id="btnBack" onclick="prevStep()" style="display:none">Zurück</button>
+        <button class="btn btn-primary" id="btnNext" onclick="nextStep()" disabled>Weiter</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const methods=[
+  {id:'klassisch',name:'Klassische Massage',desc:'Rücken, Nacken, Bewegungsapparat'},
+  {id:'fussreflex',name:'Fussreflexzonenmassage',desc:'Regeneration & Organfunktion'},
+  {id:'bindegewebe',name:'Bindegewebsmassage',desc:'Reflextherapie ohne Öl'},
+  {id:'lymph',name:'Manuelle Lymphdrainage',desc:'Entstauen & entgiften'},
+  {id:'schroepfen',name:'Schröpfen',desc:'Ausleitend, löst Verspannungen'},
+  {id:'schwingkissen',name:'Schwingkissen',desc:'Sanfter Wirbelsäulenausgleich'},
+  {id:'kinesio',name:'Kinesio-Taping',desc:'Ergänzend zur Massage'},
+];
+const catNames={massage:'Medizinische Massage',hypnose:'Hypnose',coaching:'Coaching'};
+const state={step:1,cat:null,method:null,date:null,time:null};
+
+function openBooking(preselect,method){
+  resetBooking();
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(preselect){const el=document.querySelector(`.opt[data-cat="${preselect}"]`);if(el)selectCat(el);}
+  if(method){const mel=document.querySelector(`.opt[data-method="${method}"]`);if(mel)selectMethod(mel);}
+}
+function closeBooking(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+function resetBooking(){
+  Object.assign(state,{step:1,cat:null,method:null,date:null,time:null});
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  document.getElementById('methodGroup').style.display='none';
+  ['fVorname','fNachname','fTel','fMail','fMsg'].forEach(id=>document.getElementById(id).value='');
+  calMonth=new Date();calMonth.setDate(1);
+  showStep(1);
+}
+function showStep(n){
+  state.step=n;
+  document.querySelectorAll('.step-panel').forEach(p=>p.classList.toggle('active',+p.dataset.panel===n));
+  document.querySelectorAll('.step-pill').forEach(p=>{const s=+p.dataset.s;p.classList.toggle('active',s===n);p.classList.toggle('done',s<n);});
+  const foot=document.getElementById('modalFoot'),steps=document.getElementById('steps');
+  if(n>=5){foot.style.display='none';steps.style.display='none';return;}
+  foot.style.display='flex';steps.style.display='flex';
+  document.getElementById('btnBack').style.display=n>1?'inline-flex':'none';
+  document.getElementById('footHint').textContent='Schritt '+n+' von 4';
+  const subs=['Wählen Sie Ihr Angebot','Wählen Sie ein Datum','Wählen Sie eine Uhrzeit','Ihre Kontaktdaten'];
+  document.getElementById('modalSub').textContent=subs[n-1];
+  document.getElementById('btnNext').textContent=n===4?'Buchung senden':'Weiter';
+  refreshNext();
+}
+function refreshNext(){
+  const n=state.step,btn=document.getElementById('btnNext');let ok=false;
+  if(n===1)ok=!!state.cat;
+  if(n===2)ok=!!state.date;
+  if(n===3)ok=!!state.time;
+  if(n===4)ok=contactValid();
+  btn.disabled=!ok;
+}
+function nextStep(){
+  if(document.getElementById('btnNext').disabled)return;
+  if(state.step===1){buildCalendar();showStep(2);}
+  else if(state.step===2){buildSlots();showStep(3);}
+  else if(state.step===3){buildSummary();showStep(4);}
+  else if(state.step===4){submitBooking();}
+}
+function prevStep(){if(state.step>1)showStep(state.step-1);}
+function selectCat(el){
+  document.querySelectorAll('.opt[data-cat]').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');state.cat=el.dataset.cat;state.method=null;
+  const mg=document.getElementById('methodGroup');
+  if(state.cat==='massage'){
+    mg.style.display='block';
+    const offen='<div class="opt" data-method="offen" onclick="selectMethod(this)"><div class="radio"></div><div class="txt"><b>Noch offen – Remo berät mich</b><span>Methode im Gespräch festlegen, Anliegen unten beschreiben</span></div></div>';
+    document.getElementById('methodList').innerHTML=offen+methods.map(m=>`<div class="opt" data-method="${m.id}" onclick="selectMethod(this)"><div class="radio"></div><div class="txt"><b>${m.name}</b><span>${m.desc}</span></div></div>`).join('');
+  }else{mg.style.display='none';}
+  refreshNext();
+}
+function selectMethod(el){
+  document.querySelectorAll('.opt[data-method]').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');state.method=el.dataset.method;refreshNext();
+}
+let calMonth=new Date();calMonth.setDate(1);
+const monthNames=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+function changeMonth(d){calMonth.setMonth(calMonth.getMonth()+d);buildCalendar();}
+function buildCalendar(){
+  const grid=document.getElementById('calGrid');
+  document.getElementById('calLabel').textContent=monthNames[calMonth.getMonth()]+' '+calMonth.getFullYear();
+  const today=new Date();today.setHours(0,0,0,0);
+  const thisMonthStart=new Date(today.getFullYear(),today.getMonth(),1);
+  document.getElementById('calPrev').disabled=(calMonth<=thisMonthStart);
+  let html=['Mo','Di','Mi','Do','Fr','Sa','So'].map(d=>`<div class="dow">${d}</div>`).join('');
+  const year=calMonth.getFullYear(),month=calMonth.getMonth();
+  let firstDow=new Date(year,month,1).getDay();firstDow=(firstDow+6)%7;
+  const days=new Date(year,month+1,0).getDate();
+  for(let i=0;i<firstDow;i++)html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=days;d++){
+    const date=new Date(year,month,d),dow=date.getDay();
+    const disabled=date<today||dow===0;
+    const isToday=date.getTime()===today.getTime();
+    const isSel=state.date&&date.getTime()===state.date;
+    let cls='cal-day';if(disabled)cls+=' disabled';if(isToday)cls+=' today';if(isSel)cls+=' sel';
+    html+=`<div class="${cls}" ${disabled?'':`onclick="pickDate(${date.getTime()},this)"`}>${d}</div>`;
+  }
+  grid.innerHTML=html;
+}
+function pickDate(ts,el){
+  state.date=ts;state.time=null;
+  document.querySelectorAll('.cal-day').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');refreshNext();
+}
+function buildSlots(){
+  const d=new Date(state.date),dow=d.getDay();
+  const dateStr=d.toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('slotSub').textContent='Verfügbare Termine am '+dateStr;
+  let times=dow===6?['09:00','10:00','11:00','13:00']:['08:00','09:00','10:00','11:00','13:00','14:00','15:00','16:00','17:00','18:00'];
+  const seed=d.getDate();
+  document.getElementById('slotGrid').innerHTML=times.map((t,i)=>{
+    const taken=((seed+i)%4===0);
+    return `<div class="slot ${taken?'taken':''}" ${taken?'':`onclick="pickSlot('${t}',this)"`}>${t}</div>`;
+  }).join('');
+}
+function pickSlot(t,el){
+  state.time=t;
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));
+  el.classList.add('sel');refreshNext();
+}
+function buildSummary(){
+  const d=new Date(state.date);
+  const dateStr=d.toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  let leistung=catNames[state.cat];
+  if(state.cat==='massage'){const m=methods.find(x=>x.id===state.method);leistung+=m?(' · '+m.name):' · Methode nach Absprache';}
+  document.getElementById('summary').innerHTML=`
+    <div class="row"><span>Leistung</span><b>${leistung}</b></div>
+    <div class="row"><span>Datum</span><b>${dateStr}</b></div>
+    <div class="row"><span>Uhrzeit</span><b>${state.time} Uhr</b></div>
+    <div class="row"><span>Ort</span><b>Gotthardstrasse 3, 6440 Brunnen</b></div>`;
+}
+function contactValid(){
+  const v=id=>document.getElementById(id).value.trim();
+  return v('fVorname')&&v('fNachname')&&v('fTel')&&/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('fMail'));
+}
+function validateContact(){refreshNext();}
+function submitBooking(){
+  const name=document.getElementById('fVorname').value.trim();
+  const d=new Date(state.date);
+  const dateStr=d.toLocaleDateString('de-CH',{weekday:'long',day:'numeric',month:'long'});
+  let leistung=catNames[state.cat];
+  if(state.cat==='massage'){const m=methods.find(x=>x.id===state.method);if(m)leistung+=' ('+m.name+')';}
+  document.getElementById('successLine').textContent=`${name}, Ihr Termin für ${leistung} am ${dateStr} um ${state.time} Uhr ist angefragt.`;
+  showStep(5);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBooking();});
+window.addEventListener('scroll',()=>{document.getElementById('siteHeader').classList.toggle('scrolled',window.scrollY>60);});
+</script>
+</body>
+</html>
