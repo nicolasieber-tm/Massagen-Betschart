@@ -60,10 +60,25 @@
   .nav-links a:hover{color:#fff}
   header.scrolled .nav-links a:hover{color:var(--sage-deep)}
   .nav-cta{display:flex;align-items:center;gap:1.2rem}
-  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px}
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:60}
   .burger span{width:24px;height:2px;background:#fff;border-radius:2px;transition:.3s}
   header.scrolled .burger span{background:var(--ink)}
-  @media(max-width:880px){.nav-links{display:none}.burger{display:flex}}
+  header.menu-open{background:rgba(251,249,244,.98);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  header.menu-open .logo{color:var(--ink)}
+  header.menu-open .burger span{background:var(--ink)}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  @media(max-width:880px){.nav-links{display:none}.burger{display:flex}.nav-book{display:none}}
+  /* MOBILE MENU */
+  .mobile-menu{position:fixed;inset:0;z-index:45;background:var(--cream);
+    display:flex;flex-direction:column;justify-content:center;gap:1.4rem;padding:6rem 32px 3rem;
+    opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .mobile-menu.open{opacity:1;visibility:visible}
+  .mobile-menu a{font-family:var(--serif);font-size:1.9rem;color:var(--ink);font-weight:500;transition:.2s}
+  .mobile-menu a:hover{color:var(--sage-deep)}
+  .mobile-menu .btn{margin-top:1.4rem;align-self:flex-start;font-size:1.05rem}
+  @media(min-width:881px){.mobile-menu{display:none}}
 
   /* HERO */
   .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;color:#fff;overflow:hidden}
@@ -231,9 +246,6 @@
   footer a:hover{color:#fff}
   .foot-bar{border-top:1px solid #43443c;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.8rem;color:#83847a}
 
-  .float-book{position:fixed;right:18px;bottom:18px;z-index:40;box-shadow:var(--shadow-sm)}
-  @media(min-width:881px){.float-book{display:none}}
-
   /* ---------- BOOKING OVERLAY ---------- */
   .overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(40,38,28,.6);backdrop-filter:blur(5px)}
   .overlay.open{display:flex;animation:fade .25s ease}
@@ -322,11 +334,21 @@
       <a href="#kontakt">Kontakt</a>
     </nav>
     <div class="nav-cta">
-      <button class="btn btn-primary" onclick="openBooking()">Termin buchen</button>
-      <button class="burger" aria-label="Menü"><span></span><span></span><span></span></button>
+      <button class="btn btn-primary nav-book" onclick="openBooking()">Termin buchen</button>
+      <button class="burger" aria-label="Menü" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
+
+<!-- MOBILE MENU -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <a href="#massage">Massagen</a>
+  <a href="#hypnose">Hypnose</a>
+  <a href="#coaching">Coaching</a>
+  <a href="#ueber">Über mich</a>
+  <a href="#kontakt">Kontakt</a>
+  <button class="btn btn-primary" onclick="toggleMenu(false);openBooking()">Termin buchen</button>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
@@ -679,8 +701,6 @@
   </div>
 </footer>
 
-<button class="btn btn-clay float-book" onclick="openBooking()">Termin buchen</button>
-
 <!-- BOOKING OVERLAY -->
 <div class="overlay" id="overlay" onclick="if(event.target===this)closeBooking()">
   <div class="modal" role="dialog" aria-modal="true">
@@ -904,6 +924,22 @@ function submitBooking(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeBooking();});
 window.addEventListener('scroll',()=>{document.getElementById('siteHeader').classList.toggle('scrolled',window.scrollY>60);});
+
+/* MOBILE MENU */
+const burgerBtn=document.querySelector('.burger');
+const mobileMenu=document.getElementById('mobileMenu');
+function toggleMenu(force){
+  const open=(force===undefined)?!burgerBtn.classList.contains('open'):force;
+  burgerBtn.classList.toggle('open',open);
+  burgerBtn.setAttribute('aria-expanded',open);
+  mobileMenu.classList.toggle('open',open);
+  mobileMenu.setAttribute('aria-hidden',!open);
+  document.getElementById('siteHeader').classList.toggle('menu-open',open);
+  document.body.style.overflow=open?'hidden':'';
+}
+burgerBtn.addEventListener('click',()=>toggleMenu());
+mobileMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>toggleMenu(false)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleMenu(false);});
 </script>
 </body>
 </html>
